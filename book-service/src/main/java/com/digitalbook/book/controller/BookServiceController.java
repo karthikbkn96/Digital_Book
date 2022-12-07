@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -154,7 +153,7 @@ public class BookServiceController {
 	}
 
 	@PostMapping(value = "/blockUnBlockBook/{id}")
-	public ResponseEntity<?> updateBookByAuthor(@RequestParam("blockorupdate") String blockorupdate,
+	public ResponseEntity<?> blockUnBlockBook(@RequestParam("blockorupdate") String blockorupdate,
 			@PathVariable("id") int id) throws SQLException, RunTimeExceptionMessage {
 
 		try {
