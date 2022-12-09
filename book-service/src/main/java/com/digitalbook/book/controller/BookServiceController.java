@@ -12,12 +12,10 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.websocket.server.PathParam;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.digitalbook.book.exception.RunTimeExceptionMessage;
 import com.digitalbook.book.modal.Book;
@@ -44,10 +41,9 @@ public class BookServiceController {
 	@Autowired
 	BookService bookService;
 
-	@PostMapping(value = "/createBookByAuthor", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
-			MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(value = "/createBookByAuthor")
 	public ResponseEntity<?> createBookByAuthor(@RequestParam("book") String book,
-			@RequestParam("bookcode") MultipartFile document) throws SQLException, RunTimeExceptionMessage {
+			@RequestParam("bookcode") String document) throws SQLException, RunTimeExceptionMessage {
 
 		try {
 			ObjectMapper ob = new ObjectMapper();
@@ -65,33 +61,16 @@ public class BookServiceController {
 				}
 				return ResponseEntity.badRequest().body(message);
 			} else {
-				if (null != document.getOriginalFilename()) {
-					if (StringUtils.endsWithIgnoreCase(document.getOriginalFilename(), "pdf")
-							|| StringUtils.endsWithIgnoreCase(document.getOriginalFilename(), "docx")) {
-						JSONObject obj = new JSONObject();
-						obj.put("name", document.getOriginalFilename());
-						obj.put("type", document.getContentType());
-						obj.put("data", document.getBytes());
+				books.setBookcode(document);
 
-						books.setBookcode(obj.toString());
-
-						if (bookService.exitsByAuthorBooktitle(books) == 1) {
-							return ResponseEntity.badRequest()
-									.body(new ExceptionError("Error: You have already uploaded the same book!"));
-						}
-
-						bookService.createBookByAuthor(books);
-						return ResponseEntity.ok("Book Created Successfully");
-					} else {
-
-						ExceptionError error = new ExceptionError();
-						error.setCode(HttpStatus.SC_BAD_REQUEST);
-						error.setMessage("Please Upload PDF/DOCX files");
-						return ResponseEntity.badRequest().body(error);
-					}
-
+				if (bookService.exitsByAuthorBooktitle(books) == 1) {
+					return ResponseEntity.badRequest()
+							.body(new ExceptionError("Error: You have already uploaded the same book!"));
 				}
-				return ResponseEntity.badRequest().body("Please upload pdf/docx file");
+
+				bookService.createBookByAuthor(books);
+				return ResponseEntity.ok("Book Created Successfully");
+
 			}
 
 		} catch (IOException e1) {
@@ -103,46 +82,32 @@ public class BookServiceController {
 
 	}
 
-	@PutMapping(value = "/createBookByAuthor/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<?> updateBookByAuthor(@RequestParam("bookcode") MultipartFile document,
+	@PutMapping(value = "/updateBookByAuthor/{id}")
+	public ResponseEntity<?> updateBookByAuthor(@RequestParam("bookcode") String document,
 			@RequestParam("blockorupdate") String blockorupdate, @PathParam("id") int id)
 			throws SQLException, RunTimeExceptionMessage {
 
 		try {
 
 			Book books = new Book();
-			if (null != document.getOriginalFilename()) {
-				if (StringUtils.endsWithIgnoreCase(document.getOriginalFilename(), "pdf")
-						|| StringUtils.endsWithIgnoreCase(document.getOriginalFilename(), "docx")) {
-					books.setBookcode(document.toString());
+			books.setBookcode(document.toString());
 
-					if (bookService.exitsByAuthorBooktitle(books) == 1) {
-						return ResponseEntity.badRequest()
-								.body(new ExceptionError("Error: You have already uploaded the same book!"));
-					}
-
-					if (blockorupdate.equals("update")) {
-						bookService.updateBlockBookByAuthor(books, id, blockorupdate);
-						return ResponseEntity.ok("Book Updated Successfully");
-					} else if (blockorupdate.equals("block")) {
-						bookService.updateBlockBookByAuthor(books, id, blockorupdate);
-						return ResponseEntity.ok("Book Block Successfully");
-					} else if (blockorupdate.equals("unblock")) {
-						bookService.updateBlockBookByAuthor(books, id, blockorupdate);
-						return ResponseEntity.ok("Book Unblocked Successfully");
-					}
-
-				} else {
-
-					ExceptionError error = new ExceptionError();
-					error.setCode(HttpStatus.SC_BAD_REQUEST);
-					error.setMessage("Please Upload PDF/DOCX files");
-					return ResponseEntity.badRequest().body(error);
-				}
-
+			if (bookService.exitsByAuthorBooktitle(books) == 1) {
+				return ResponseEntity.badRequest()
+						.body(new ExceptionError("Error: You have already uploaded the same book!"));
 			}
-			return ResponseEntity.badRequest().body("Please upload pdf/docx file");
 
+			if (blockorupdate.equals("update")) {
+				bookService.updateBlockBookByAuthor(books, id, blockorupdate);
+				return ResponseEntity.ok("Book Updated Successfully");
+			} else if (blockorupdate.equals("block")) {
+				bookService.updateBlockBookByAuthor(books, id, blockorupdate);
+				return ResponseEntity.ok("Book Block Successfully");
+			} else if (blockorupdate.equals("unblock")) {
+				bookService.updateBlockBookByAuthor(books, id, blockorupdate);
+				return ResponseEntity.ok("Book Unblocked Successfully");
+			}
+			return ResponseEntity.ok("Success");
 		} catch (Exception e1) {
 			ExceptionError error = new ExceptionError();
 			error.setCode(HttpStatus.SC_BAD_REQUEST);
@@ -198,5 +163,13 @@ public class BookServiceController {
 		List<Book> book = bookService.searchBook(null, null, userid);
 		return book;
 
+	}
+
+	@Value("${spring.datasource.url}")
+	private String message;
+
+	@RequestMapping("/getMessage")
+	public String getMessage() {
+		return this.message;
 	}
 }

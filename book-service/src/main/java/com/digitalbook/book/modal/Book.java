@@ -1,6 +1,5 @@
 package com.digitalbook.book.modal;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -55,7 +54,7 @@ public class Book {
 
 	private int createdby;
 
-	private int updateby;
+	private int updatedby;
 
 	private String createdon;
 
@@ -165,12 +164,12 @@ public class Book {
 		this.createdby = createdby;
 	}
 
-	public int getUpdateby() {
-		return updateby;
+	public int getUpdatedby() {
+		return updatedby;
 	}
 
-	public void setUpdateby(int updateby) {
-		this.updateby = updateby;
+	public void setUpdatedby(int updatedby) {
+		this.updatedby = updatedby;
 	}
 
 	public String getCreatedon() {
@@ -182,7 +181,7 @@ public class Book {
 	}
 
 	public Book(String booktitle, String bookcode, int authorid, double price, String category, String publisher,
-			String logo, String audiourl, String content, int isactive, String updatedon, int createdby, int updateby,
+			String logo, String audiourl, String content, int isactive, String updatedon, int createdby, int updatedby,
 			String createdon) {
 		super();
 		this.booktitle = booktitle;
@@ -197,7 +196,7 @@ public class Book {
 		this.isactive = isactive;
 		this.updatedon = updatedon;
 		this.createdby = createdby;
-		this.updateby = updateby;
+		this.updatedby = updatedby;
 		this.createdon = createdon;
 	}
 

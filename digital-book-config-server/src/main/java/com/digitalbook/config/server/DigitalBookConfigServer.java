@@ -11,5 +11,4 @@ public class DigitalBookConfigServer {
 	public static void main(String[] args) {
 		SpringApplication.run(DigitalBookConfigServer.class, args);
 	}
-
 }
