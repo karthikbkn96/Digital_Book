@@ -22,4 +22,8 @@ public interface BookService {
 
 	int exitsByAuthorBooktitle(Book book) throws SQLException;
 
+	List<Book> authorBook(int userId) throws SQLException;
+	
+	Book getBookById(int bookid) throws SQLException;
+
 }

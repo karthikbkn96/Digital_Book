@@ -59,9 +59,20 @@ public class BookServiceRepository {
 		return book;
 	}
 
+	public List<Book> authorBook(int userId) throws SQLException {
+		List<Book> book = jdbctemplate.query(SqlQueries.authorBooks, new Object[] { userId },
+				new BeanPropertyRowMapper(Book.class));
+		return book;
+	}
+
 	public int subscriptionBook(int bookid, int userid) throws SQLException {
 		int result = jdbctemplate.update(SqlQueries.subscriptionBook, userid, 1, bookid);
 		return result;
+	}
+
+	public Book getBookById(int bookid) {
+		return (Book) jdbctemplate.queryForObject(SqlQueries.getBookById, new BeanPropertyRowMapper(Book.class), bookid);
+		
 	}
 
 }

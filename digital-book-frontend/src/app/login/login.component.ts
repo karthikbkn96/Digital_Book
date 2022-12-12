@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from '../app.component';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
@@ -15,14 +16,21 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
+  author =false;
   roles: string[] = [];
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(private authService: AuthService, private appComponent: AppComponent, private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
+    this.author= this.appComponent.showAuthor;
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
+    }
+    if(this.isLoggedIn && !this.author){
+      window.location.href = location.origin+"/readerhome";  
+    }else if(this.isLoggedIn && this.author){
+      window.location.href = location.origin+"/home";  
     }
   }
 

@@ -1,9 +1,10 @@
-<div class="col-md-4">
+<div class="container">
+<div class="col-md-12">
     <div class="card card-container">
       <img
         id="profile-img"
         src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
+        class="profile-img-card imageSize"
       />
       <form
         *ngIf="!isSuccessful"
@@ -74,10 +75,12 @@
             <label for="phonenumber">Phone Number</label>
             <input
               type="number"
-              class="form-control"
+              pattern="[0-9]*" 
+              class="form-control no-spin"
               name="phonenumber"
               [(ngModel)]="form.phonenumber"
               required
+              min="0"
               minlength="10"
               maxlength="10"
               #phonenumber="ngModel"
@@ -94,8 +97,15 @@
           </div>
           <div class="form-group">
             <label for="role">Role</label>
-           
-           
+            <select class="form-control" name="role" [(ngModel)]="form.role" #role="ngModel"  required>
+                <option value="">Select</option>
+                <option value="author">Author</option>
+                <option value="reader">Reader</option>
+              </select>
+            <div class="alert-danger" *ngIf="role.errors && f.submitted">
+              <div *ngIf="role.errors?.['required']">Please select role</div>
+              
+            </div>
           </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block">Sign Up</button>
@@ -111,3 +121,4 @@
       </div>
     </div>
   </div>
+</div>

@@ -1,0 +1,35 @@
+
+<div class="container">
+
+    <div class = "row ">
+        <h4> Subscribed Book List</h4>
+    </div>
+    
+    <table class = "table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th> Book Title</th>
+                <th> Category </th>
+                <th> Audio URL</th>
+                <th> Content</th>
+                <th> Author </th>
+                <th> Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor = "let book of Books" >
+                <td> {{ book.booktitle }}</td>
+                <td>  {{book.category}}</td>
+                <td> <audio controls>
+                    <source src={{book.audiourl}} type="audio/mpeg">
+                   Audio
+                  </audio> </td>
+                <td> {{book.content}} </td>
+                <td> {{book.publisher}} </td>
+                <td>
+                    <button (click) = "view(book.bookcode)" class = "btn btn-primary marginleft"> View</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>

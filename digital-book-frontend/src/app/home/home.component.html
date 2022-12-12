@@ -1,5 +1,32 @@
+
 <div class="container">
-    <header class="jumbotron">
-      <p>{{ content }}</p>
-    </header>
-  </div>
+
+<div class = "row ">
+    <h4> Book List</h4>
+</div>
+
+<table class = "table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th> Book Title</th>
+            <th> Category </th>
+            <th> Price</th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let book of Books" >
+            <td> {{ book.booktitle }}</td>
+            <td> {{book.category}}</td>
+            <td> {{book.price}} </td>
+            <td>
+                <button (click) = "view(book.bookcode)" class = "btn btn-primary marginleft"> View</button>
+                <button (click) = "update(book.id)" class = "btn btn-primary marginleft"> Update</button>
+                <button (click) = "blockunblock(book.id, 'block')"  class = "btn btn-danger marginleft" *ngIf="book.isactive==1"> Block</button>
+                <button (click) = "blockunblock(book.id, 'unblock')"  class = "btn btn-danger marginleft" *ngIf="book.isactive==0"> UnBlock</button>
+                
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>

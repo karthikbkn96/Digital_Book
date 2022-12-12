@@ -16,4 +16,7 @@ public class SqlQueries {
 	
 	public final static String subscriptionBook = "INSERT INTO BOOKSUBSCRIPTION (USERID, ISACTIVE, BOOKID)  VALUES(?,?,?)";
 	
+	public final static String authorBooks = "SELECT * FROM BOOK WHERE Authorid=? ";
+	
+	public final static String getBookById = "SELECT * FROM BOOK WHERE id=?";
 }

@@ -44,7 +44,6 @@ public class Book {
 
 	private String audiourl;
 
-	@Size(max = 50)
 	private String content;
 
 	@Min(1)

@@ -1,5 +1,137 @@
 <div class="container">
-    <header class="jumbotron">
-      <p>{{ content }}</p>
-    </header>
+<div class="col-md-12">
+    <div class="card card-container">
+        <nav class="navbar navbar-expand navbar-light bg-light">
+            <ul class="navbar-nav mr-auto" routerLinkActive="active">
+                <li class="nav-item">
+                  <strong>Create Book</strong>
+
+                </li>
+              </ul>
+        </nav>
+      <form
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="booktitle">Book Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="booktitle"
+            [(ngModel)]="form.booktitle"
+            required
+            minlength="2"
+            maxlength="200"
+            #booktitle="ngModel"
+          />
+          <div class="alert-danger" *ngIf="booktitle.errors && f.submitted">
+            <div *ngIf="booktitle.errors?.['required']">Booktitle is required</div>
+            <div *ngIf="booktitle.errors?.['minlength']">
+              Booktitle must be at least 3 characters
+            </div>
+            <div *ngIf="booktitle.errors?.['maxlength']">
+                booktitle must be at most 200 characters
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input
+              type="number"
+              pattern="[0-9]" 
+              step="1"
+              class="form-control no-spin"
+              name="price"
+              [(ngModel)]="form.price"
+              min="0"
+              placeholder="0"
+              #price="ngModel"
+              oninput="validity.valid||(value='');"
+            />
+        </div>
+            <div class="form-group">
+                <label for="role">Category</label>
+                <select class="form-control" name="category" [(ngModel)]="form.category" #category="ngModel"  required>
+                    <option value="">Select</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Sport">Sport</option>
+                  </select>
+                <div class="alert-danger" *ngIf="category.errors && f.submitted">
+                  <div *ngIf="category.errors?.['required']">Please select category</div>
+                  
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="bookcode">Book File</label>
+                <input
+                  type="file"
+                  class="form-control no-spin"
+                  name="bookcode"
+                  [(ngModel)]="form.bookcode"
+                  required
+                  (change)="selectFile($event)"
+                  accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                  text/plain, application/pdf"
+                  #bookcode="ngModel"
+                />
+                <div class="alert-danger" *ngIf="bookcode.errors && f.submitted">
+                  <div *ngIf="bookcode.errors?.['required']">BOok File is required</div>
+                </div>
+              </div>
+             
+            <div class="form-group">
+                <label for="logo">Logo</label>
+                <input
+                  type="file"
+                  class="form-control no-spin"
+                  name="logo"
+                  (change)="selectLogo($event)"
+                  [(ngModel)]="form.logo"
+                  #logo="ngModel"
+                  accept="image/*"
+                />
+              </div>
+              <div class="form-group">
+                <label for="audiourl">Audio URL</label>
+                <input
+                  type="text"
+                  class="form-control no-spin"
+                  name="audiourl"
+                  [(ngModel)]="form.audiourl"
+                  #audiourl="ngModel"
+                />
+              </div>
+    
+              <div class="form-group">
+                <label for="content">Content</label>
+                <textarea input="text"
+                  class="form-control no-spin contentInput"
+                  name="content"
+                  [(ngModel)]="form.content"
+                  #content="ngModel"
+                ></textarea>
+              </div>
+              
+       
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">Create Book</button>
+        </div>
+  
+        <div class="alert alert-warning" *ngIf="f.submitted && isFailed">
+          Book failed to create!<br />{{ errorMessage }}
+        </div>
+      </form>
+  
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        Book is successful created!
+      </div>
+    </div>
   </div>
+</div>

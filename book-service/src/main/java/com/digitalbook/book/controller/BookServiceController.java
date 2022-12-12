@@ -64,8 +64,7 @@ public class BookServiceController {
 				books.setBookcode(document);
 
 				if (bookService.exitsByAuthorBooktitle(books) == 1) {
-					return ResponseEntity.badRequest()
-							.body(new ExceptionError("Error: You have already uploaded the same book!"));
+					return ResponseEntity.badRequest().body("Error: You have already uploaded the same book!");
 				}
 
 				bookService.createBookByAuthor(books);
@@ -165,11 +164,18 @@ public class BookServiceController {
 
 	}
 
-	@Value("${spring.datasource.url}")
-	private String message;
+	@GetMapping(value = "/AuthorBook/{userid}")
+	public List<Book> AuthorBook(@PathVariable("userid") int userid) throws SQLException {
 
-	@RequestMapping("/getMessage")
-	public String getMessage() {
-		return this.message;
+		List<Book> book = bookService.authorBook(userid);
+		return book;
+
+	}
+
+	@GetMapping(value = "/getbookById/{bookid}")
+	public Book GetbookById(@PathVariable("bookid") int bookid) throws SQLException, RunTimeExceptionMessage {
+
+		return bookService.getBookById(bookid);
+
 	}
 }

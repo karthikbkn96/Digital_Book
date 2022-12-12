@@ -36,8 +36,6 @@ public class BookRequest {
 	@NotBlank
 	private String audiourl;
 
-	@NotBlank
-	@Size(max = 50)
 	private String content;
 
 	@Min(1)

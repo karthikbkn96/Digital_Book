@@ -38,10 +38,21 @@ public class BookServiceImpl implements BookService {
 			throws SQLException {
 		return bookServiceRepository.searchBook(searchKeys, subscribeBooks, userId);
 	}
+	
+	@Override
+	public List<Book> authorBook(int userId)
+			throws SQLException {
+		return bookServiceRepository.authorBook(userId);
+	}
 
 	@Override
 	public int subscriptionBook(int bookid, int userid) throws SQLException {
 		return bookServiceRepository.subscriptionBook(bookid, userid);
+	}
+
+	@Override
+	public Book getBookById(int bookid) throws SQLException {
+		return bookServiceRepository.getBookById(bookid);
 	}
 
 }

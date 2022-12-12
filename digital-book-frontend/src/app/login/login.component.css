@@ -1,0 +1,14 @@
+.imageSize{
+    height : 190px;
+}
+
+@media (min-width: 500px) {
+    .container {
+      width: 450px;
+      margin-top : 30px;
+    }
+  }
+
+  .form-group {
+    margin: 1rem;
+}

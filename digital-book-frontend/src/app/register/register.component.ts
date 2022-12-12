@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,9 @@ export class RegisterComponent implements OnInit {
   form: any = {
     username: null,
     email: null,
-    password: null
+    password: null,
+    phonenumber:null,
+    role:null
   };
   isSuccessful = false;
   isSignUpFailed = false;
@@ -22,13 +25,20 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { username, email, password } = this.form;
+    const { username, email, password, phonenumber, role } = this.form;
+    let myData = new Array<string>();
+    myData.push(role);
 
-    this.authService.register(username, email, password).subscribe(
+    this.authService.register(username, email, password, phonenumber, myData).subscribe(
       data => {
-        console.log(data);
         this.isSuccessful = true;
         this.isSignUpFailed = false;
+        setTimeout(() => {
+          setTimeout(() => {
+            window.location.href = location.origin+"/login";
+          });
+        }, 3000);
+     
       },
       err => {
         this.errorMessage = err.error.message;
