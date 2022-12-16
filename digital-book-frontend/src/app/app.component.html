@@ -2,6 +2,10 @@
   <nav class="navbar navbar-expand navbar-dark bg-dark">
     
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
+      <img style="height: 50px;" src="https://userimag.s3.amazonaws.com/ebook.jpg">
+      <li class="nav-item">
+      <a class="nav-link"><h5 style="color: antiquewhite;">Digitial Book</h5></a>
+      </li>
       <li class="nav-item" *ngIf="showAuthor">
         <a href="/home" class="nav-link" routerLink="home">Home </a>
       </li>
@@ -9,7 +13,7 @@
         <a href="/readerhome" class="nav-link" routerLink="readerhome">Home </a>
       </li>
       <li class="nav-item"  *ngIf="showReader">
-        <a href="/subscription" class="nav-link" *ngIf="isLoggedIn" routerLink="subscription">Subscription Book</a>
+        <a href="/subscription" class="nav-link" *ngIf="isLoggedIn" routerLink="subscription">Book Subscription</a>
       </li>
       <li class="nav-item"  *ngIf="showAuthor">
         <a href="/createbook" class="nav-link" *ngIf="isLoggedIn" routerLink="createbook">Create Book</a>
@@ -35,7 +39,7 @@
     </ul>
   </nav>
 
-  <div>
+ <div>
     <router-outlet></router-outlet>
   </div>
 </div>

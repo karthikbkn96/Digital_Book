@@ -1,8 +1,23 @@
 .row {
-     margin-left: 0 !important;
      margin-top: 20px;
 }
 
+h4 {
+    margin-left: 20px;
+}
 .marginleft{
     margin-left: 10px
+}
+
+.row {
+    color: white;
+    background: grey;
+}
+
+.container {
+    background: aliceblue;
+}
+
+.btn{
+    font-size: 0.8rem;
 }

@@ -1,5 +1,7 @@
-
-<div class="container">
+<div class="holder">
+    <div class="message"><b>New E-Books are uploaded...!!</b></div>
+  </div>
+<div class="container-fluid">
 
     <div class = "row ">
         <h4> Subscribed Book List</h4>
@@ -8,27 +10,42 @@
     <table class = "table table-striped table-bordered">
         <thead>
             <tr>
+                <th>Book</th>
                 <th> Book Title</th>
                 <th> Category </th>
-                <th> Audio URL</th>
                 <th> Content</th>
+               
+                <th>Price</th>
                 <th> Author </th>
+                <th> Updated On</th>
+                <th> Audio URL</th>
                 <th> Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="bookCount">
             <tr *ngFor = "let book of Books" >
-                <td> {{ book.booktitle }}</td>
-                <td>  {{book.category}}</td>
-                <td> <audio controls>
-                    <source src={{book.audiourl}} type="audio/mpeg">
-                   Audio
-                  </audio> </td>
-                <td> {{book.content}} </td>
-                <td> {{book.publisher}} </td>
-                <td>
-                    <button (click) = "view(book.bookcode)" class = "btn btn-primary marginleft"> View</button>
+                <td style="width:5%"> <img style=" height:70px" src={{book.logo}}> </td>
+                <td style="width:10%"> {{ book.booktitle }}</td>
+                <td style="width:8%">  {{book.category}}</td>
+                <td style="width:20%"> {{book.content}} </td>
+              
+               <td style="width:7%">Rs. {{book.price}}</td>
+                <td style="width:10%"> {{book.publisher}} </td>
+                <td style="width:13%"> {{book.updatedon}} </td>
+                <td style="width:10%">  <a href={{book.audiourl}} target="_blank"> Audio Link </a> </td>
+                <td style="width:13%">
+                    <button class = "btn btn-primary marginleft"><a style="color:white" href={{book.bookcode}} target="_blank">View</a> </button>
+                    <button (click) = "UnSubscribe(book.subscribeid, 'unsubscribe')"  class = "btn btn-danger marginleft"> Unsubscribe</button>
                 </td>
+            </tr>
+        </tbody>
+        <tbody  *ngIf="!bookCount">
+            <tr>
+                <td colspan="9"></td>
+            </tr>
+            <tr style="height:150px">
+               
+                <td colspan="9"style="text-align: center;"> No Data Available</td>
             </tr>
         </tbody>
     </table>

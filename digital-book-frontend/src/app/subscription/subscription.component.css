@@ -1,0 +1,54 @@
+.imageSize{
+    height : 190px;
+}
+
+@media (min-width: 600px) {
+    #search {
+      width: 550px;
+      margin-top : 30px;
+    }
+  }
+
+  .form-group {
+    margin: 1rem;
+}
+
+.card-container {
+    margin:15px;
+    background: aliceblue;
+    
+}
+
+  .holder {
+    background:gold;
+    padding:0.5rem;
+    overflow: hidden;
+    color: red;
+  }
+  .message {
+    animation : slide 20s linear infinite;
+     }
+  
+  @keyframes slide {
+    0% {
+      transform: translatex(0%)
+    }
+  
+    100% {
+      transform: translatex(100%)
+    }
+  }
+
+  .form-row {
+    margin: 10px;
+  }
+  
+#searchTable
+{
+    background: aliceblue;
+ }
+ 
+ h4 {
+    margin-left: 15px;
+}
+

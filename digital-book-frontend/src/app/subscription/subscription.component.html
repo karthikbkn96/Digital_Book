@@ -1,1 +1,117 @@
-<p>subscription works!</p>
+<div class="holder">
+    <div class="message"><b>Happy Learning...!!</b></div>
+  </div>
+<div class="container" id="search">
+<div class="col-md-12">
+    
+    <div class="card card-container">
+        <div style="background: #17a2b8; text-align: center;color:white">
+            <h5>Search Books</h5>
+            
+                </div>
+      <form
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label" for="booktitle"><h6>Book Title</h6></label>
+          <input
+            type="text"
+            class="form-control col-sm-7"
+            name="booktitle"
+            placeholder="Enter Title"
+            [(ngModel)]="form.booktitle"
+            #booktitle="ngModel"
+          />
+        </div>
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label" for="author"><h6>Author</h6></label>
+          <input
+            type="text"
+            placeholder="Enter Author Name"
+            class="form-control col-sm-7"
+            name="author"
+            [(ngModel)]="form.author"
+            #author="ngModel"
+          />
+        </div>
+          <div class="form-row">
+            <label class="col-sm-4 col-form-label" for="releaseddate"><h6>Released Date</h6></label>
+            <input
+              type="text"
+              placeholder="Enter Released Date"
+              class="form-control col-sm-7"
+              name="releaseddate"
+              [(ngModel)]="form.releaseddate"
+              #releaseddate="ngModel"
+            />
+          </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">
+           <h6>Search</h6> 
+          </button>
+        </div>
+        <div class="form-group">
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && searchFailed"
+          >
+            {{ errorMessage }}
+          </div>
+        </div>
+      </form>
+  
+      
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="searchSuccess" id="searchTable">
+
+    <div class = "row ">
+        <h4> Book List</h4>
+    </div>
+    
+    <table class = "table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th> Book Title</th>
+                <th> Category </th>
+                <th> Content</th>
+               
+                <th>Price</th>
+                <th> Author </th><th>Publish Date</th>
+                <th> Action</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="bookCount">
+            <tr *ngFor = "let book of Books" >
+                <td style="width:5%"> <img style=" height:70px" src={{book.logo}}> </td>
+                <td style="width:10%"> {{ book.booktitle }}</td>
+                <td style="width:8%">  {{book.category}}</td>
+                <td style="width:18%"> {{book.content}} </td>
+              
+               <td style="width:11%">Rs. {{book.price}}</td>
+                <td style="width:8%"> {{book.publisher}} </td>
+                <td style="width:11%">{{book.publishdate}}</td>
+                <td style="width:12%">
+                    <button disabled="disabled" *ngIf = "book.publishdatevalid == 0" class = "btn btn-danger marginleft"> Publish Soon</button>
+                    <button (click)="subscribe(book.id, 'subscribe')" class = "btn btn-primary marginleft" *ngIf = "book.publishdatevalid == 1"> Subscribe</button>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="!bookCount">
+            <tr>
+                <td colspan="8"></td>
+            </tr>
+            <tr style="height:150px">
+               
+                <td colspan="8"style="text-align: center;"> No Data Available</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

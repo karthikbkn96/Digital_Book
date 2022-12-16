@@ -13,8 +13,13 @@ import { BoardAuthorComponent } from './board-author/board-author.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { EditComponent } from './edit/edit.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReaderComponent } from './reader/reader.component';
 import { SubscriptionComponent } from './subscription/subscription.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatTableModule} from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -33,7 +38,12 @@ import { SubscriptionComponent } from './subscription/subscription.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatPaginatorModule , 
+    MatTableModule,
+    MatProgressSpinnerModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

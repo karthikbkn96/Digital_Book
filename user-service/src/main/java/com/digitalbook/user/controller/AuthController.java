@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -95,7 +94,7 @@ public class AuthController {
 	            message.add("@" + e.getField().toUpperCase() + ":" + e.getDefaultMessage());
 	        }
 	        ExceptionError error = new ExceptionError();
-	        error.setCode(HttpStatus.SC_BAD_REQUEST);
+	        error.setCode(500);
 	        error.setMessage("Please Enter Valid Details");
 	        error.setCause(message.toString());
 	        return ResponseEntity.badRequest().body(error);

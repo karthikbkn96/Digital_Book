@@ -12,12 +12,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-view(arg0: String) {
-throw new Error('Method not implemented.');
-}
+  bookCount: boolean = false;
+
 update(id: number) {
   this.router.navigate(['editBook', id]);
 }
+
+
 
   content?: string;
   Books: book[] | undefined;
@@ -25,7 +26,13 @@ update(id: number) {
 
   private getBooks(){
     this.authService.getBooksList().subscribe(data => {
+      debugger;
       this.Books = data;
+      if(this.Books.length > 0){
+        this.bookCount = true;
+      }else{
+        this.bookCount =false;
+      }
     });
   }
 

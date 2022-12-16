@@ -14,4 +14,8 @@ export class book {
       createdby!: number;
       updatedby!: number;
       createdon!: String;
+      subscribedcount!:number;
+      subscribeid!:number;
+      publishdatevalid!:number;
+      publishdate!:number;
 }

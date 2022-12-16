@@ -16,6 +16,7 @@
             #f="ngForm"
             novalidate
           >
+         
             <div class="form-group">
               <label for="booktitle">Book Title</label>
               <input
@@ -79,7 +80,7 @@
                       type="file"
                       class="form-control no-spin"
                       name="logo"
-                      disabled="true"
+                      
                       [(ngModel)]="book.logo"
                       #logo="ngModel"
                       accept="image/*"

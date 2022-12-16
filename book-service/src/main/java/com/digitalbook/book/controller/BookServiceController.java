@@ -13,8 +13,8 @@ import javax.validation.ValidatorFactory;
 import javax.websocket.server.PathParam;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.digitalbook.book.exception.RunTimeExceptionMessage;
 import com.digitalbook.book.modal.Book;
 import com.digitalbook.book.modal.ExceptionError;
+import com.digitalbook.book.response.AuthorBook;
+import com.digitalbook.book.response.ReaderBookResponse;
+import com.digitalbook.book.response.SearchResponse;
 import com.digitalbook.book.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -139,13 +142,19 @@ public class BookServiceController {
 
 	}
 
-	@GetMapping(value = "/BookSubscription/{userid}/{bookid}")
-	public ResponseEntity<?> BookSubscription(@PathVariable("bookid") int bookid, @PathVariable("userid") int userid)
+	@PostMapping(value = "/BookSubscription/{userid}/{bookid}")
+	public ResponseEntity<?> BookSubscription(@PathVariable("bookid") int bookid,
+			@RequestParam("subscribe") String subscribe, @PathVariable("userid") int userid)
 			throws SQLException, RunTimeExceptionMessage {
 
 		try {
-			bookService.subscriptionBook(bookid, userid);
-			return ResponseEntity.ok("Book Subscribed Successfully");
+			String subcscribe = new JSONObject(subscribe).getString("subscribe");
+			bookService.subscriptionBook(bookid, userid, subcscribe);
+			if (subscribe.equals("subscribe")) {
+				return ResponseEntity.ok("Book Subscribed Successfully");
+			} else {
+				return ResponseEntity.ok("Book Unsubscribed");
+			}
 
 		} catch (Exception e1) {
 			ExceptionError error = new ExceptionError();
@@ -157,17 +166,18 @@ public class BookServiceController {
 	}
 
 	@GetMapping(value = "/SubscribedBooks/{userid}")
-	public List<Book> BookSubscription(@PathVariable("userid") int userid) throws SQLException {
+	public List<ReaderBookResponse> BookSubscription(@PathVariable("userid") int userid) throws SQLException {
 
-		List<Book> book = bookService.searchBook(null, null, userid);
+		List<ReaderBookResponse> book = bookService.searchBook(null, null, userid);
 		return book;
 
 	}
 
 	@GetMapping(value = "/AuthorBook/{userid}")
-	public List<Book> AuthorBook(@PathVariable("userid") int userid) throws SQLException {
+	public List<AuthorBook> AuthorBook(@PathVariable("userid") int userid) throws SQLException {
 
-		List<Book> book = bookService.authorBook(userid);
+		List<AuthorBook> book = bookService.authorBook(userid);
+		System.out.println(book);
 		return book;
 
 	}
@@ -178,4 +188,13 @@ public class BookServiceController {
 		return bookService.getBookById(bookid);
 
 	}
+
+	@PostMapping(value = "/searchBook")
+	public List<SearchResponse> searchBooks(@RequestParam("date") String date,@RequestParam("booktitle") String booktitle,@RequestParam("userid") String userid, @RequestParam("publisher") String publisher)
+			throws SQLException, RunTimeExceptionMessage {
+
+		return bookService.searchBooks(date, booktitle, publisher, Integer.parseInt(userid));
+
+	}
+
 }

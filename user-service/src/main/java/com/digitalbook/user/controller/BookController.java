@@ -1,6 +1,7 @@
 package com.digitalbook.user.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -51,9 +52,7 @@ public class BookController {
 	@GetMapping("/SubscribedBooks")
 	@PreAuthorize("hasRole('READER')")
 	public String SubscribedBooks() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Optional<User> user = userRepository.findByUsername(auth.getName());
-		User users = user.get();
+		User users = CurrentUser();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
@@ -67,9 +66,7 @@ public class BookController {
 	@GetMapping("/AuthorBooks")
 	@PreAuthorize("hasRole('AUTHOR')")
 	public String AuthorBooks() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Optional<User> user = userRepository.findByUsername(auth.getName());
-		User users = user.get();
+		User users = CurrentUser();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
@@ -83,7 +80,7 @@ public class BookController {
 	public ResponseEntity<?> blockUnBlockBook(@RequestBody String blockorupdate, @PathVariable("id") int id) {
 
 		String url = "http://localhost:8089/book/blockUnBlockBook/" + id;
-		
+
 		MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
 		bodyMap.add("blockorupdate", new JSONObject(blockorupdate).get("blockorunblock"));
 		HttpHeaders headers = new HttpHeaders();
@@ -94,19 +91,22 @@ public class BookController {
 		return response;
 	}
 
-	@PreAuthorize("hasRole('AUTHOR') || hasRole('READER')")
-	@GetMapping(value = "/BookSubscription/{userid}/{bookid}")
-	public String BookSubscription(@PathVariable("bookid") int bookid, @PathVariable("userid") int userid) {
+	@PreAuthorize("hasRole('READER')")
+	@PostMapping(value = "/BookSubscription/{bookid}")
+	public String BookSubscription(@PathVariable("bookid") int bookid, @RequestBody String subscribe) {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("http://localhost:8089/book/BookSubscription/");
-		sb.append(userid);
+		sb.append(CurrentUser().getId());
 		sb.append("/");
 		sb.append(bookid);
-		return UserServiceApplication.restTemplate().exchange(sb.toString(), HttpMethod.GET, entity, String.class)
+		MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+		bodyMap.add("subscribe", subscribe);
+		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(bodyMap, headers);
+		return UserServiceApplication.restTemplate().exchange(sb.toString(), HttpMethod.POST, entity, String.class)
 				.getBody();
 	}
 
@@ -123,9 +123,7 @@ public class BookController {
 
 		JSONObject bookObject = new JSONObject(book);
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Optional<User> user = userRepository.findByUsername(auth.getName());
-		User users = user.get();
+		User users = CurrentUser();
 		bookObject.put("authorid", users.getId());
 		bookObject.put("publisher", users.getUsername());
 		bookObject.put("createdby", users.getId());
@@ -170,15 +168,14 @@ public class BookController {
 
 	}
 
-	@PutMapping(value = "/updateBookByAuthor/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> updateBookByAuthor(@RequestParam("bookcode") MultipartFile document,
-			@RequestParam("blockorupdate") String blockorupdate, @PathParam("id") int id)
-			throws JSONException, IOException {
+	@PutMapping(value = "/updateBookByAuthor/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> updateBookByAuthor(@RequestPart("book") String book,
+			@RequestPart("bookcode") MultipartFile document, @PathVariable("id") int id, @RequestPart("logo") MultipartFile logo)
+			throws IOException {
 
 		String url = "http://localhost:8089/book/updateBookByAuthor/" + id;
 		MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
-		bodyMap.add("blockorupdate", blockorupdate);
+		bodyMap.add("blockorupdate", "update");
 		if (null != document.getOriginalFilename()) {
 			if (StringUtils.endsWithIgnoreCase(document.getOriginalFilename(), "pdf")
 					|| StringUtils.endsWithIgnoreCase(document.getOriginalFilename(), "docx")) {
@@ -203,7 +200,7 @@ public class BookController {
 		return response;
 
 	}
-	
+
 	@PreAuthorize("hasRole('AUTHOR')")
 	@GetMapping(value = "/getbookById/{bookid}")
 	public String BookSubscription(@PathVariable("bookid") String bookid) {
@@ -211,8 +208,32 @@ public class BookController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		String sb = "http://localhost:8089/book/getbookById/"+bookid;
-		return UserServiceApplication.restTemplate().exchange(sb, HttpMethod.GET, entity, String.class)
+		String sb = "http://localhost:8089/book/getbookById/" + bookid;
+		return UserServiceApplication.restTemplate().exchange(sb, HttpMethod.GET, entity, String.class).getBody();
+	}
+
+	private User CurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Optional<User> user = userRepository.findByUsername(auth.getName());
+		return user.get();
+	}
+
+	@PostMapping(value = "/searchBook")
+	public String searchBooks(@RequestBody String search) throws SQLException {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		User users = CurrentUser();
+		String sb = "http://localhost:8089/book/searchBook";
+		JSONObject obj = new JSONObject(search);
+		MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+		bodyMap.add("userid",users.getId());
+		bodyMap.add("date", obj.get("date"));
+		bodyMap.add("booktitle", obj.get("booktitle"));
+		bodyMap.add("publisher", obj.get("publisher"));
+		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(bodyMap, headers);
+		return UserServiceApplication.restTemplate().exchange(sb.toString(), HttpMethod.POST, entity, String.class)
 				.getBody();
+
 	}
 }

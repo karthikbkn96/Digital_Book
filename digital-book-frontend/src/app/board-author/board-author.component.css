@@ -1,5 +1,10 @@
 .container{
-    margin-top: 50px;
+    margin-top: 10px;
+}
+
+
+.form-group[_ngcontent-mnn-c53] {
+    margin: 0.5rem;
 }
 
 @media (min-width: 700px) {
@@ -25,3 +30,24 @@ input[type=number]:first-of-type::-webkit-outer-spin-button{
     background-color: #0069d9 !important;
     border-color: #0062cc !important;
 }
+
+
+.holder {
+    background:lightgray;
+    padding:0.5rem;
+    overflow: hidden;
+    color: red;
+  }
+  .message {
+    animation : slide 20s linear infinite;
+     }
+  
+  @keyframes slide {
+    0% {
+      transform: translatex(0%)
+    }
+  
+    100% {
+      transform: translatex(100%)
+    }
+  }

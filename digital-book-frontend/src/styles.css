@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+    background-image: url("https://userimag.s3.amazonaws.com/backgroundimage.jfif");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  background-attachment: fixed;
+  }

@@ -13,7 +13,8 @@ export class BoardAuthorComponent implements OnInit {
     price: null,
     category:null,
     audiourl:null,
-    content:null
+    content:null,
+    publishdate:null
   };
   isSuccessful = false;
   isFailed = false;
@@ -39,10 +40,10 @@ export class BoardAuthorComponent implements OnInit {
   onSubmit(): void {
      this.bookcode= this.selectedFiles;
      this.logo = this.selectedLogo;
-    const {  booktitle, price,category,audiourl,content} = this.form;
+    const {  booktitle, price,category,audiourl,content,publishdate} = this.form;
     
 
-    this.authService.createBook(booktitle,  this.bookcode,price,category,audiourl,content,this.logo).subscribe(
+    this.authService.createBook(booktitle,  this.bookcode,price,category,audiourl,content,this.logo,publishdate).subscribe(
       data => {
         this.isSuccessful = true;
         this.isFailed = false;

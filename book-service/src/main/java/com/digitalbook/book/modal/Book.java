@@ -30,7 +30,7 @@ public class Book {
 	private int authorid;
 
 	@Min(value = 0L, message = "Negative price is not accaptable")
-	private double price;
+	private float price;
 
 	@NotBlank(message = "Category must not be null")
 	@Size(max = 200)
@@ -57,6 +57,8 @@ public class Book {
 
 	private String createdon;
 
+	private String publishdate;
+	
 	public Long getId() {
 		return id;
 	}
@@ -89,11 +91,11 @@ public class Book {
 		this.authorid = authorid;
 	}
 
-	public double getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
@@ -178,10 +180,18 @@ public class Book {
 	public void setCreatedon(String createdon) {
 		this.createdon = createdon;
 	}
+	
+	public String getPublishdate() {
+		return publishdate;
+	}
 
-	public Book(String booktitle, String bookcode, int authorid, double price, String category, String publisher,
+	public void setPublishdate(String publishdate) {
+		this.publishdate = publishdate;
+	}
+
+	public Book(String booktitle, String bookcode, int authorid, float price, String category, String publisher,
 			String logo, String audiourl, String content, int isactive, String updatedon, int createdby, int updatedby,
-			String createdon) {
+			String createdon, String publishdate) {
 		super();
 		this.booktitle = booktitle;
 		this.bookcode = bookcode;
@@ -197,6 +207,7 @@ public class Book {
 		this.createdby = createdby;
 		this.updatedby = updatedby;
 		this.createdon = createdon;
+		this.publishdate = publishdate;
 	}
 
 	public Book() {

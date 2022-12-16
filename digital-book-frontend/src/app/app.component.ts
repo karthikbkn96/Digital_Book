@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   showAuthor = false;
   showReader=false;
   username?: string;
+background: any;
 
   constructor(private tokenStorageService: TokenStorageService) { }
 

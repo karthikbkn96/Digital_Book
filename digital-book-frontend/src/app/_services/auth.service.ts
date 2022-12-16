@@ -35,8 +35,8 @@ export class AuthService {
     }, httpOptions);
   }
 
-  createBook(booktitle : String,  bookcode :any,price:String,category:String,audiourl:String,content :String,logo:any): Observable<any> {
-   const json = {booktitle,price,category,audiourl,content};
+  createBook(booktitle : String,  bookcode :any,price:String,category:String,audiourl:String,content :String,logo:any, publishdate:String): Observable<any> {
+   const json = {booktitle,price,category,audiourl,content,publishdate};
     
     const formData = new FormData();
     formData.append('logo', logo);
@@ -63,4 +63,26 @@ formData.append('book', new Blob([JSON.stringify(json)], {
   getSubscribedList(): Observable<book[]>{
     return this.http.get<book[]>(BOOK_API + 'SubscribedBooks');
   }
-}
+
+  unSubscribe(id:number, subscribe: String): Observable<any> {
+    return this.http.post(BOOK_API + 'BookSubscription/'+id,{subscribe});
+   }
+
+   searchBook(booktitle:String,publisher :String,date:String): Observable<any>{
+    const json = {booktitle,publisher,date};
+    return this.http.post(BOOK_API + 'searchBook',JSON.stringify(json));
+   }
+
+   updateBook(id:number,booktitle : String,  bookcode :any,price:String,category:String,audiourl:String,content :String,logo:any, publishdate:String): Observable<any> {
+    const json = {booktitle,price,category,audiourl,content,publishdate};
+     
+     const formData = new FormData();
+     formData.append('logo', logo);
+ formData.append('bookcode', bookcode);
+ formData.append('book', new Blob([JSON.stringify(json)], {
+       type: "application/json"
+   }));
+   return this.http.post(BOOK_API + 'updateBookByAuthor/'+id,formData);
+  }
+
+  }

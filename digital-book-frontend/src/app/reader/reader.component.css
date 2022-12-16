@@ -1,8 +1,48 @@
 .row {
-    margin-left: 0 !important;
     margin-top: 20px;
 }
 
+h4 {
+   margin-left: 20px;
+}
 .marginleft{
    margin-left: 10px
 }
+
+.row {
+   color: white;
+   background: grey;
+}
+
+.container-fluid {
+   background: aliceblue;
+}
+
+
+.holder {
+    background:var(--warning);
+    padding:0.5rem;
+    overflow: hidden;
+    color: red;
+  }
+  .message {
+    animation : slide 20s linear infinite;
+     }
+  
+  @keyframes slide {
+    0% {
+      transform: translatex(0%)
+    }
+  
+    100% {
+      transform: translatex(100%)
+    }
+  }
+
+  .btn{
+    font-size: 0.8rem;
+  }
+
+  img {
+    height: 80px;
+  }
