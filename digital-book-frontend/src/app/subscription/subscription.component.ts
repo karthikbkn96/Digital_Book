@@ -24,10 +24,9 @@ export class SubscriptionComponent {
   booktitle="";
   author="";
   releaseddate="";
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
-    
   }
   Books!: book[];
   
@@ -41,22 +40,29 @@ export class SubscriptionComponent {
 
   
   subscribe(id: number,blockunblock: string) {
-    this.authService.unSubscribe(id, blockunblock).subscribe(data => {
-      this.onSubmit();
-    }
-    ,
-      err => {
-        if(err.status == 200){
-          setTimeout(() => {
-            setTimeout(() => {
-              this.onSubmit();
-            });
-          }, 3000);
-        }
+    if(this.tokenStorage.getToken() === "" || this.tokenStorage.getToken() === null){
+      window.location.href = location.origin+"/login";
+    }else{
+      this.authService.unSubscribe(id, blockunblock).subscribe(data => {
         this.onSubmit();
-      });
+      }
+      ,
+        err => {
+          if(err.status == 200){
+            setTimeout(() => {
+              setTimeout(() => {
+                this.onSubmit();
+              });
+            }, 3000);
+          }
+          this.onSubmit();
+        });
+      
+    }
+  
+ 
     
-  }
+}
 
 private search(){
   const {booktitle,author,releaseddate} = this.form;
@@ -80,6 +86,14 @@ private search(){
       this.errorMessage = "Server Side Error";
     }
   );
-}
+  }
 
+  logo(code:String){
+    var byteArray = new Uint8Array(JSON.parse(code.valueOf()).data);
+    const STRING_CHAR = byteArray.reduce((data, byte)=> {
+      return data + String.fromCharCode(byte);
+      }, '');
+      let base64String = btoa(STRING_CHAR);
+return 'data:image/jpeg;base64,' + base64String;
+  }
 }

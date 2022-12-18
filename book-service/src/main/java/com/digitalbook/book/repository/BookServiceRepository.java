@@ -43,14 +43,18 @@ public class BookServiceRepository {
 	}
 
 	public int updateBlockBookByAuthor(Book book, int id, String updateOrBlock) throws SQLException {
+		LocalDateTime dateTime = LocalDateTime.now();
+		String updatedon = dateTime.format(DateTimeFormatter.ofPattern("dd-MM-uuuu HH:mm:ss"));
+		
 		if (updateOrBlock.equals("update")) {
-			int result = jdbctemplate.update(SqlQueries.UPDATEBOOK, book.getBookcode(), book.getUpdatedon(), id);
+			int result = jdbctemplate.update(SqlQueries.UPDATEBOOK, book.getBookcode(),
+					updatedon, id);
 			return result;
 		} else if (updateOrBlock.equals("block")) {
-			int result = jdbctemplate.update(SqlQueries.BLOCKBOOK, 0, book.getUpdatedon(), id);
+			int result = jdbctemplate.update(SqlQueries.BLOCKBOOK, 0, updatedon, id);
 			return result;
 		} else if (updateOrBlock.equals("unblock")) {
-			int result = jdbctemplate.update(SqlQueries.UNBLOCKBOOK, 1, book.getUpdatedon(), id);
+			int result = jdbctemplate.update(SqlQueries.UNBLOCKBOOK, 1, updatedon, id);
 			return result;
 		}
 

@@ -21,7 +21,7 @@
     </thead>
     <tbody  *ngIf="bookCount">
         <tr *ngFor = "let book of Books" >
-            <td  style="width:8%;"><img style=" height:70px" src={{book.logo}}></td>
+            <td  style="width:8%;"><img style=" height:70px; width:70px" [src]="logo(book.logo)"></td>
             <td  style="width:12%"> {{book.booktitle }}</td>
             <td  style="width:10%"> {{book.category}}</td>
             <td  style="width:23%"> {{book.content}}</td>
@@ -29,7 +29,7 @@
             <td style="text-align:center;width:18%" >{{book.subscribedcount}} </td>
        
             <td  style="width:25%">
-                <button class = "btn btn-primary marginleft"> <a style="color:white" href={{book.bookcode}} target="_blank">View</a> </button>
+                <button (click)="view(book.bookcode)" class = "btn btn-primary marginleft"> View </button>
                 <button (click) = "update(book.id)" class = "btn btn-primary marginleft"> Update</button>
                 <button (click) = "blockunblock(book.id, 'block')"  class = "btn btn-danger marginleft" *ngIf="book.isactive==1"> Block</button>
                 <button (click) = "blockunblock(book.id, 'unblock')"  class = "btn btn-danger marginleft" *ngIf="book.isactive==0"> UnBlock</button>

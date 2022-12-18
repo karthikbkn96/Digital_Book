@@ -1,6 +1,4 @@
-<div class="holder">
-    <div class="message"><b>New E-Books are uploaded...!!</b></div>
-  </div>
+
 <div class="container-fluid">
 
     <div class = "row ">
@@ -24,7 +22,7 @@
         </thead>
         <tbody *ngIf="bookCount">
             <tr *ngFor = "let book of Books" >
-                <td style="width:5%"> <img style=" height:70px" src={{book.logo}}> </td>
+                <td style="width:5%"><img style=" height:70px; width:70px" [src]="logo(book.logo)"></td>
                 <td style="width:10%"> {{ book.booktitle }}</td>
                 <td style="width:8%">  {{book.category}}</td>
                 <td style="width:20%"> {{book.content}} </td>
@@ -34,7 +32,7 @@
                 <td style="width:13%"> {{book.updatedon}} </td>
                 <td style="width:10%">  <a href={{book.audiourl}} target="_blank"> Audio Link </a> </td>
                 <td style="width:13%">
-                    <button class = "btn btn-primary marginleft"><a style="color:white" href={{book.bookcode}} target="_blank">View</a> </button>
+                    <button (click)="view(book.bookcode)" class = "btn btn-primary marginleft"> View </button>
                     <button (click) = "UnSubscribe(book.subscribeid, 'unsubscribe')"  class = "btn btn-danger marginleft"> Unsubscribe</button>
                 </td>
             </tr>

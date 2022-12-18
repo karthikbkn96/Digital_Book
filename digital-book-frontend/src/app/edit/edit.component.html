@@ -62,7 +62,7 @@
                       type="file"
                       class="form-control no-spin"
                       name="bookcode"
-                      [(ngModel)]="book.bookcode"
+                      (ngModel)="book.bookcode"
                       required
                       (change)="selectFile($event)"
                       accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
@@ -72,19 +72,6 @@
                     <div class="alert-danger" *ngIf="bookcode.errors && f.submitted">
                       <div *ngIf="bookcode.errors?.['required']">BOok File is required</div>
                     </div>
-                  </div>
-                 
-                <div class="form-group">
-                    <label for="logo">Logo</label>
-                    <input
-                      type="file"
-                      class="form-control no-spin"
-                      name="logo"
-                      
-                      [(ngModel)]="book.logo"
-                      #logo="ngModel"
-                      accept="image/*"
-                    />
                   </div>
                   <div class="form-group">
                     <label for="audiourl">Audio URL</label>

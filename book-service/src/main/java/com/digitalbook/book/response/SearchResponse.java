@@ -1,9 +1,6 @@
 package com.digitalbook.book.response;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class SearchResponse {
@@ -117,14 +114,18 @@ public class SearchResponse {
 	}
 
 	public void setPublishdate(String publishdate) {
-		if(null != publishdate || !publishdate.equals("")) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		if (null != publishdate || !publishdate.equals("")) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			String formattedDate = sdf.format(new Date());
-			
-			if(formattedDate.equals(publishdate)) {
+			String publishdate1 = publishdate.replace("-", "");
+
+			if (Integer.parseInt(formattedDate) > Integer.parseInt(publishdate1)) {
 				setPublishdatevalid(1);
+			}else {
+				setPublishdatevalid(0);
 			}
 		}
+		
 		this.publishdate = publishdate;
 	}
 
@@ -151,8 +152,7 @@ public class SearchResponse {
 		this.publishdate = publishdate;
 	}
 
-	
 	public SearchResponse() {
-		
+
 	}
 }

@@ -10,32 +10,26 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import javax.websocket.server.PathParam;
 
-import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitalbook.book.exception.RunTimeExceptionMessage;
 import com.digitalbook.book.modal.Book;
-import com.digitalbook.book.modal.ExceptionError;
 import com.digitalbook.book.response.AuthorBook;
 import com.digitalbook.book.response.ReaderBookResponse;
 import com.digitalbook.book.response.SearchResponse;
 import com.digitalbook.book.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RefreshScope
 @RestController
 @Validated
 @RequestMapping("/book")
@@ -46,7 +40,8 @@ public class BookServiceController {
 
 	@PostMapping(value = "/createBookByAuthor")
 	public ResponseEntity<?> createBookByAuthor(@RequestParam("book") String book,
-			@RequestParam("bookcode") String document) throws SQLException, RunTimeExceptionMessage {
+			@RequestParam("bookcode") String document, @RequestParam("logo") String logo)
+			throws SQLException, RunTimeExceptionMessage, Exception {
 
 		try {
 			ObjectMapper ob = new ObjectMapper();
@@ -65,7 +60,7 @@ public class BookServiceController {
 				return ResponseEntity.badRequest().body(message);
 			} else {
 				books.setBookcode(document);
-
+				books.setLogo(logo);
 				if (bookService.exitsByAuthorBooktitle(books) == 1) {
 					return ResponseEntity.badRequest().body("Error: You have already uploaded the same book!");
 				}
@@ -76,52 +71,35 @@ public class BookServiceController {
 			}
 
 		} catch (IOException e1) {
-			ExceptionError error = new ExceptionError();
-			error.setCode(HttpStatus.SC_BAD_REQUEST);
-			error.setMessage(e1.getMessage().toString());
-			return ResponseEntity.badRequest().body(error);
+			return ResponseEntity.badRequest().body("Server Side Issue");
 		}
 
 	}
 
-	@PutMapping(value = "/updateBookByAuthor/{id}")
+	@PostMapping(value = "/updateBookByAuthor/{id}")
 	public ResponseEntity<?> updateBookByAuthor(@RequestParam("bookcode") String document,
-			@RequestParam("blockorupdate") String blockorupdate, @PathParam("id") int id)
-			throws SQLException, RunTimeExceptionMessage {
+			@RequestParam("blockorupdate") String blockorupdate, @PathVariable("id") int id)
+			throws SQLException, RunTimeExceptionMessage, Exception {
 
 		try {
 
 			Book books = new Book();
-			books.setBookcode(document.toString());
-
-			if (bookService.exitsByAuthorBooktitle(books) == 1) {
-				return ResponseEntity.badRequest()
-						.body(new ExceptionError("Error: You have already uploaded the same book!"));
-			}
+			books.setBookcode(document);
 
 			if (blockorupdate.equals("update")) {
 				bookService.updateBlockBookByAuthor(books, id, blockorupdate);
 				return ResponseEntity.ok("Book Updated Successfully");
-			} else if (blockorupdate.equals("block")) {
-				bookService.updateBlockBookByAuthor(books, id, blockorupdate);
-				return ResponseEntity.ok("Book Block Successfully");
-			} else if (blockorupdate.equals("unblock")) {
-				bookService.updateBlockBookByAuthor(books, id, blockorupdate);
-				return ResponseEntity.ok("Book Unblocked Successfully");
 			}
 			return ResponseEntity.ok("Success");
 		} catch (Exception e1) {
-			ExceptionError error = new ExceptionError();
-			error.setCode(HttpStatus.SC_BAD_REQUEST);
-			error.setMessage("Server Side Issue");
-			return ResponseEntity.badRequest().body(error);
+			return ResponseEntity.badRequest().body("Server Side Issue");
 		}
 
 	}
 
 	@PostMapping(value = "/blockUnBlockBook/{id}")
 	public ResponseEntity<?> blockUnBlockBook(@RequestParam("blockorupdate") String blockorupdate,
-			@PathVariable("id") int id) throws SQLException, RunTimeExceptionMessage {
+			@PathVariable("id") int id) throws SQLException, RunTimeExceptionMessage, Exception {
 
 		try {
 			Book books = new Book();
@@ -134,10 +112,7 @@ public class BookServiceController {
 			}
 			return ResponseEntity.badRequest().body("Book Not Found");
 		} catch (Exception e1) {
-			ExceptionError error = new ExceptionError();
-			error.setCode(HttpStatus.SC_BAD_REQUEST);
-			error.setMessage("Server Side Issue");
-			return ResponseEntity.badRequest().body(error);
+			return ResponseEntity.badRequest().body("Server Side Issue");
 		}
 
 	}
@@ -145,7 +120,7 @@ public class BookServiceController {
 	@PostMapping(value = "/BookSubscription/{userid}/{bookid}")
 	public ResponseEntity<?> BookSubscription(@PathVariable("bookid") int bookid,
 			@RequestParam("subscribe") String subscribe, @PathVariable("userid") int userid)
-			throws SQLException, RunTimeExceptionMessage {
+			throws SQLException, RunTimeExceptionMessage, Exception {
 
 		try {
 			String subcscribe = new JSONObject(subscribe).getString("subscribe");
@@ -157,16 +132,14 @@ public class BookServiceController {
 			}
 
 		} catch (Exception e1) {
-			ExceptionError error = new ExceptionError();
-			error.setCode(HttpStatus.SC_BAD_REQUEST);
-			error.setMessage("Server Side Issue");
-			return ResponseEntity.badRequest().body(error);
+			return ResponseEntity.badRequest().body("Server Side Issue");
 		}
 
 	}
 
 	@GetMapping(value = "/SubscribedBooks/{userid}")
-	public List<ReaderBookResponse> BookSubscription(@PathVariable("userid") int userid) throws SQLException {
+	public List<ReaderBookResponse> BookSubscription(@PathVariable("userid") int userid)
+			throws SQLException, Exception {
 
 		List<ReaderBookResponse> book = bookService.searchBook(null, null, userid);
 		return book;
@@ -174,7 +147,7 @@ public class BookServiceController {
 	}
 
 	@GetMapping(value = "/AuthorBook/{userid}")
-	public List<AuthorBook> AuthorBook(@PathVariable("userid") int userid) throws SQLException {
+	public List<AuthorBook> AuthorBook(@PathVariable("userid") int userid) throws SQLException, Exception {
 
 		List<AuthorBook> book = bookService.authorBook(userid);
 		System.out.println(book);
@@ -183,16 +156,21 @@ public class BookServiceController {
 	}
 
 	@GetMapping(value = "/getbookById/{bookid}")
-	public Book GetbookById(@PathVariable("bookid") int bookid) throws SQLException, RunTimeExceptionMessage {
+	public Book GetbookById(@PathVariable("bookid") int bookid)
+			throws SQLException, RunTimeExceptionMessage, Exception {
 
 		return bookService.getBookById(bookid);
 
 	}
 
 	@PostMapping(value = "/searchBook")
-	public List<SearchResponse> searchBooks(@RequestParam("date") String date,@RequestParam("booktitle") String booktitle,@RequestParam("userid") String userid, @RequestParam("publisher") String publisher)
-			throws SQLException, RunTimeExceptionMessage {
+	public List<SearchResponse> searchBooks(@RequestParam("date") String date,
+			@RequestParam("booktitle") String booktitle, @RequestParam("userid") String userid,
+			@RequestParam("publisher") String publisher) throws SQLException, RunTimeExceptionMessage, Exception {
 
+		if (userid.equals("")) {
+			return bookService.searchBooks(date, booktitle, publisher, 0);
+		}
 		return bookService.searchBooks(date, booktitle, publisher, Integer.parseInt(userid));
 
 	}

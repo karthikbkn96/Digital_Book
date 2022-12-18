@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
       this.roles = this.tokenStorage.getUser().roles;
     }
     if(this.isLoggedIn && !this.author){
-      window.location.href = location.origin+"/readerhome";  
+      window.location.href = location.origin+"/subscribedbook";  
     }else if(this.isLoggedIn && this.author){
       window.location.href = location.origin+"/home";  
     }

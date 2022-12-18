@@ -39,12 +39,13 @@ export class EditComponent implements OnInit {
   }
 
   onSubmit(): void {
+    debugger;
     this.bookcode= this.selectedFiles;
     this.logo = this.selectedLogo;
    const { booktitle, price,category,audiourl,content,publishdate} = this.form;
    
 
-   this.authService.updateBook(this.id,booktitle,  this.bookcode,price,category,audiourl,content,this.logo,publishdate).subscribe(
+   this.authService.updateBook(this.id,booktitle,  this.bookcode,price,category,audiourl,content,publishdate).subscribe(
      data => {
        this.isSuccessful = true;
        this.isFailed = false;

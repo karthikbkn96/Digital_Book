@@ -1,6 +1,5 @@
 package com.digitalbook.user.exception;
 
-import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,19 +14,12 @@ public class GlobalException extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> exception(ExceptionError ex) {
-		JSONObject obj = new JSONObject();
-		obj.append("Error Message", ex.getMessage());
-		obj.append("Error Code", ex.getCode());
-
-		return ResponseEntity.badRequest().body(obj.toString());
+		return ResponseEntity.badRequest().body(ex.getMessage());
 
 	}
 
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<?> handleAccessDeniedException(Exception ex, WebRequest request) {
-		JSONObject obj = new JSONObject();
-		obj.put("Error Code", "401");
-		obj.put("Error Message", "Access denied for this end point");
-		return ResponseEntity.badRequest().body(obj.toString());
+		return ResponseEntity.badRequest().body("Access denied for this end point");
 	}
 }

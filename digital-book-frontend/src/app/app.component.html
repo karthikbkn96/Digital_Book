@@ -7,13 +7,13 @@
       <a class="nav-link"><h5 style="color: antiquewhite;">Digitial Book</h5></a>
       </li>
       <li class="nav-item" *ngIf="showAuthor">
-        <a href="/home" class="nav-link" routerLink="home">Home </a>
+        <a href="/home" class="nav-link" routerLink="home">Author Dashboard </a>
       </li>
-      <li class="nav-item" *ngIf="showReader">
-        <a href="/readerhome" class="nav-link" routerLink="readerhome">Home </a>
+      <li class="nav-item" *ngIf="isLoggedIn">
+        <a href="/subscribedbook" class="nav-link" routerLink="subscribedbook">Subscribed Book </a>
       </li>
-      <li class="nav-item"  *ngIf="showReader">
-        <a href="/subscription" class="nav-link" *ngIf="isLoggedIn" routerLink="subscription">Book Subscription</a>
+      <li class="nav-item">
+        <a href="/searchbook" class="nav-link" routerLink="searchbook">Search Book</a>
       </li>
       <li class="nav-item"  *ngIf="showAuthor">
         <a href="/createbook" class="nav-link" *ngIf="isLoggedIn" routerLink="createbook">Create Book</a>

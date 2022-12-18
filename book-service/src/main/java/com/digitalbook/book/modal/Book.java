@@ -24,7 +24,6 @@ public class Book {
 	@Size(max = 250)
 	private String booktitle;
 
-	@Size(max = 50)
 	private String bookcode;
 
 	private int authorid;
@@ -148,8 +147,6 @@ public class Book {
 	}
 
 	public String getUpdatedon() {
-		LocalDateTime dateTime = LocalDateTime.now();
-		updatedon = dateTime.format(DateTimeFormatter.ofPattern("dd-MM-uuuu HH:mm:ss"));
 		return updatedon;
 	}
 

@@ -55,4 +55,20 @@ bookCount: boolean = false;
           window.location.href = location.origin+"/login";
         }
       }
+
+      view(code:String){
+    var byteArray = new Uint8Array(JSON.parse(code.valueOf()).data);
+    var file = new Blob([byteArray], {type: JSON.parse(code.valueOf()).type});
+    var fileURL = URL.createObjectURL(file);
+    window.open(fileURL);
+  }
+
+  logo(code:String){
+    var byteArray = new Uint8Array(JSON.parse(code.valueOf()).data);
+    const STRING_CHAR = byteArray.reduce((data, byte)=> {
+      return data + String.fromCharCode(byte);
+      }, '');
+      let base64String = btoa(STRING_CHAR);
+return 'data:image/jpeg;base64,' + base64String;
+  }
     }

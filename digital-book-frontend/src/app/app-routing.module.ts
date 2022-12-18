@@ -18,9 +18,9 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'createbook', component: BoardAuthorComponent },
-  { path: 'readerhome', component: ReaderComponent },
-  { path: 'subscription', component: SubscriptionComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: 'subscribedbook', component: ReaderComponent },
+  { path: 'searchbook', component: SubscriptionComponent },
+  { path: '', redirectTo: 'searchbook', pathMatch: 'full' }
 ];
 
 @NgModule({

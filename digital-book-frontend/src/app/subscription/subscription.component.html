@@ -1,6 +1,4 @@
-<div class="holder">
-    <div class="message"><b>Happy Learning...!!</b></div>
-  </div>
+
 <div class="container" id="search">
 <div class="col-md-12">
     
@@ -90,7 +88,7 @@
         </thead>
         <tbody *ngIf="bookCount">
             <tr *ngFor = "let book of Books" >
-                <td style="width:5%"> <img style=" height:70px" src={{book.logo}}> </td>
+                <td style="width:5%"> <img style=" height:70px; width:70px" [src]="logo(book.logo)"></td>
                 <td style="width:10%"> {{ book.booktitle }}</td>
                 <td style="width:8%">  {{book.category}}</td>
                 <td style="width:18%"> {{book.content}} </td>

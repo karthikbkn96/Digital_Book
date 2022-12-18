@@ -4,10 +4,11 @@ import { Observable } from 'rxjs';
 import { book } from '../book';
 
 const AUTH_API = 'http://localhost:8087/api/auth/';
-const BOOK_API = 'http://localhost:8087/digitalbook/';
+
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+
 };
 
 @Injectable({
@@ -26,12 +27,12 @@ export class AuthService {
   }
 
   register(username: string, email: string, password: string, phonenumber: string, role: Array<String>): Observable<any> {
-    return this.http.post(AUTH_API + 'signup', {
+    return this.http.post(AUTH_API +'signup' , {
       username,
       email,
       password,
       phonenumber,
-      role
+      role 
     }, httpOptions);
   }
 
@@ -45,44 +46,40 @@ formData.append('book', new Blob([JSON.stringify(json)], {
       type: "application/json"
   }));
     
-    return this.http.post(BOOK_API + 'createBookByAuthor',formData);
+    return this.http.post(AUTH_API + 'createBookByAuthor',formData);
   }
 
   getBooksList(): Observable<book[]>{
-    return this.http.get<book[]>(BOOK_API + 'AuthorBooks');
+    return this.http.get<book[]>(AUTH_API + 'AuthorBooks');
   }
 
   blockunblock(userid:number, blockorunblock: String): Observable<any> {
-    return this.http.post(BOOK_API + 'blockUnBlockBook/'+userid,{blockorunblock});
+    return this.http.post(AUTH_API + 'blockUnBlockBook/'+userid,{blockorunblock});
    }
 
    getBookById(id: number): Observable<book>{
-    return this.http.get<book>(BOOK_API + 'getbookById/'+id);
+    return this.http.get<book>(AUTH_API + 'getbookById/'+id);
   }
 
   getSubscribedList(): Observable<book[]>{
-    return this.http.get<book[]>(BOOK_API + 'SubscribedBooks');
+    return this.http.get<book[]>(AUTH_API + 'SubscribedBooks');
   }
 
   unSubscribe(id:number, subscribe: String): Observable<any> {
-    return this.http.post(BOOK_API + 'BookSubscription/'+id,{subscribe});
+    return this.http.post(AUTH_API + 'BookSubscription/'+id,{subscribe});
    }
 
    searchBook(booktitle:String,publisher :String,date:String): Observable<any>{
     const json = {booktitle,publisher,date};
-    return this.http.post(BOOK_API + 'searchBook',JSON.stringify(json));
+    return this.http.post(AUTH_API + 'searchBook',JSON.stringify(json));
    }
 
-   updateBook(id:number,booktitle : String,  bookcode :any,price:String,category:String,audiourl:String,content :String,logo:any, publishdate:String): Observable<any> {
+   updateBook(id:number,booktitle : String,  bookcode :any,price:String,category:String,audiourl:String,content :String, publishdate:String): Observable<any> {
     const json = {booktitle,price,category,audiourl,content,publishdate};
      
      const formData = new FormData();
-     formData.append('logo', logo);
  formData.append('bookcode', bookcode);
- formData.append('book', new Blob([JSON.stringify(json)], {
-       type: "application/json"
-   }));
-   return this.http.post(BOOK_API + 'updateBookByAuthor/'+id,formData);
+   return this.http.post(AUTH_API + 'updateBookByAuthor/'+id,formData);
   }
 
   }

@@ -6,7 +6,7 @@ public class SqlQueries {
 	
 	public final static String EXITSBYAUTHORBOOKTITLE = "SELECT COUNT(*) FROM BOOK WHERE AUTHORID =? AND BOOKTITLE=?";
 	
-	public final static String UPDATEBOOK = "UPDATE BOOK SET BOOKCODE= ? , UPDATEDON=? WHERE ID=?";
+	public final static String UPDATEBOOK = "UPDATE BOOK SET BOOKCODE= ?, UPDATEDON=? WHERE ID=?";
 	
 	public final static String BLOCKBOOK = "UPDATE BOOK SET ISACTIVE=?, UPDATEDON=? WHERE ID=?";
 	
